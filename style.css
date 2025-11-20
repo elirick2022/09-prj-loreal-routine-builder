@@ -186,6 +186,20 @@ body {
   display: flex;
   gap: 15px;
   min-height: 160px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hover state - change border and scale up slightly */
+.product-card:hover {
+  border-color: #ff003b;
+  transform: scale(1.05);
+}
+
+/* Selected state - change border color */
+.product-card.selected {
+  border-color: #e3a535;
+  border-width: 2px;
 }
 
 .product-card img {
@@ -230,6 +244,35 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  min-height: 50px;
+}
+
+/* Style for selected product tags */
+.selected-product-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.selected-product-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 16px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.selected-product-tag button:hover {
+  color: #000;
 }
 
 .generate-btn {
