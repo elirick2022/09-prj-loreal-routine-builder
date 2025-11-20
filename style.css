@@ -184,6 +184,7 @@ body {
   padding: 15px;
   border-radius: 4px;
   display: flex;
+  flex-direction: column;
   gap: 15px;
   min-height: 160px;
   cursor: pointer;
@@ -192,13 +193,13 @@ body {
 
 /* Hover state - change border and scale up slightly */
 .product-card:hover {
-  border-color: #ff003b;
+  border-color: #e3a535;
   transform: scale(1.05);
 }
 
 /* Selected state - change border color */
 .product-card.selected {
-  border-color: #e3a535;
+  border-color: #ff003b;
   border-width: 2px;
 }
 
@@ -217,14 +218,121 @@ body {
   min-height: 110px;
 }
 
-.product-card h3 {
-  font-size: 16px;
+.product-card-content {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+}
+
+/* About button in product card */
+.about-btn {
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  background: #f5f5f5;
+  border: 1px solid #000;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: auto;
+}
+
+.about-btn:hover {
+  background: #e8e8e8;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+/* Modal content */
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: #000;
+}
+
+/* Modal product details */
+.modal-product-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.modal-product-brand {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   margin-bottom: 8px;
 }
 
-.product-card p {
-  font-size: 14px;
-  color: #666;
+.modal-product-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.modal-product-category {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  font-size: 12px;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+}
+
+.modal-product-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
 }
 
 /* selected products */

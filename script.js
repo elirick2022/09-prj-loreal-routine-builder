@@ -8,6 +8,9 @@ const selectedProductsList = document.getElementById("selectedProductsList");
 /* Array to store selected products */
 let selectedProducts = [];
 
+/* Store all products globally for modal access */
+let allProducts = [];
+
 /* Show initial placeholder until user selects a category */
 productsContainer.innerHTML = `
   <div class="placeholder-message">
@@ -28,20 +31,40 @@ function displayProducts(products) {
     .map(
       (product) => `
     <div class="product-card" data-product-id="${product.id}">
-      <img src="${product.image}" alt="${product.name}">
-      <div class="product-info">
-        <h3>${product.name}</h3>
-        <p>${product.brand}</p>
+      <div class="product-card-content">
+        <img src="${product.image}" alt="${product.name}">
+        <div class="product-info">
+          <h3>${product.name}</h3>
+          <p>${product.brand}</p>
+        </div>
       </div>
+      <button class="about-btn" data-product-id="${product.id}">About</button>
     </div>
   `
     )
     .join("");
 
-  /* Add click event listeners to all product cards */
+  /* Add click event listeners to product cards (not About buttons) */
   const productCards = document.querySelectorAll(".product-card");
   productCards.forEach((card) => {
-    card.addEventListener("click", () => handleProductClick(card, products));
+    /* Click on card itself (excluding About button) */
+    card.addEventListener("click", (e) => {
+      /* Don't trigger if clicking the About button */
+      if (!e.target.closest(".about-btn")) {
+        handleProductClick(card, products);
+      }
+    });
+  });
+
+  /* Add click event listeners to About buttons */
+  const aboutButtons = document.querySelectorAll(".about-btn");
+  aboutButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      /* Stop event from bubbling to card click handler */
+      e.stopPropagation();
+      const productId = parseInt(button.dataset.productId);
+      openProductModal(productId);
+    });
   });
 
   /* Restore selected state for previously selected products */
@@ -114,9 +137,53 @@ function removeProduct(productId) {
   updateProductCardStates();
 }
 
+/* Open modal with product details */
+function openProductModal(productId) {
+  /* Find the product by ID */
+  const product = allProducts.find((p) => p.id === productId);
+  if (!product) return;
+
+  /* Create modal HTML */
+  const modalHTML = `
+    <div class="modal-overlay active" id="productModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeProductModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img src="${product.image}" alt="${product.name}" class="modal-product-image">
+        <div class="modal-product-brand">${product.brand}</div>
+        <h2 class="modal-product-name">${product.name}</h2>
+        <span class="modal-product-category">${product.category}</span>
+        <p class="modal-product-description">${product.description}</p>
+      </div>
+    </div>
+  `;
+
+  /* Add modal to page */
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+  /* Close modal when clicking outside content */
+  const modalOverlay = document.getElementById("productModal");
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+      closeProductModal();
+    }
+  });
+}
+
+/* Close and remove modal */
+function closeProductModal() {
+  const modal = document.getElementById("productModal");
+  if (modal) {
+    modal.remove();
+  }
+}
+
 /* Filter and display products when category changes */
 categoryFilter.addEventListener("change", async (e) => {
   const products = await loadProducts();
+  /* Store products globally for modal access */
+  allProducts = products;
   const selectedCategory = e.target.value;
 
   /* filter() creates a new array containing only products 
